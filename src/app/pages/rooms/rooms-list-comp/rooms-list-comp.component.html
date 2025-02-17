@@ -1,0 +1,34 @@
+<div class="w-full p-4">
+    <h1 class="font-semibold text-xl">{{title}}</h1>
+    <table class="w-full">
+        <thead>
+            <tr class="bg-sky-950 text-sky-100">
+                <th class="py-4">Index</th>
+                <th class="py-4">Room Number</th>
+                <th class="py-4">Room Type</th>
+                <th class="py-4">Room Price</th>
+                <th class="py-4">Room Amenities</th>
+                <th class="py-4">Room Checkin Time</th>
+                <th class="py-4">Room Checkout Time</th>
+                <th class="py-4">Select Room</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let room of Rooms; let e = even; let o = odd; let i = index" [ngClass]="e ? 'even' : 'odd'">
+                <td>{{i}}</td>
+                <td>{{room?.roomNumber}}</td>
+                <td>{{room?.roomType}}</td>
+                <td>{{room?.roomPrice | currency: 'INR'}}</td>
+                <td>{{room?.roomAmenities}}</td>
+                <td>{{room?.roomCheckinTime | date}}</td>
+                <td>{{room?.roomCheckoutTime?.toDateString()}}</td>
+                <td>
+                    <button (click)="selectRoom(room)"
+                        class="border p-1 m-2 rounded-md hover:bg-slate-950 hover:text-white hover:border-slate-950">
+                        Select
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

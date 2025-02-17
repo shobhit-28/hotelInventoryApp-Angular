@@ -1,13 +1,23 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { RoomsModule } from './pages/rooms/rooms.module';
+import { InitService } from '../initService/init.service';
 
 @Component({
-  selector: 'app-root',
+  selector: 'hinv-root',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [RoomsModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'hotelInventoryApp';
+  constructor(
+    private initService: InitService
+  ){}
+
+  ngOnInit(): void {
+    console.log(this.initService.initFunc())
+    console.log(this.initService.config)
+  }
 }
