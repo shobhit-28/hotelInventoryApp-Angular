@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { RoomDataInterface } from '../roomsData';
 import _ from 'lodash';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'hinv-rooms-list-comp',
@@ -14,6 +15,10 @@ export class RoomsListCompComponent implements OnChanges {
   @Input() title: string = 'Table'
   @Output() selectedRoomEmitter = new EventEmitter<RoomDataInterface>();
 
+  constructor(
+    private router: Router
+  ) {}
+
   private obj1 = {a: 1, b: 2, c:{a: 1, b: {a: 1, b: {a: 1, b: {a: 1, b: {a: 1, b: {a: 1, b: {a: 1, b: {a: 1, b: 2}}}}}}}}}
   private obj2 = {a: 1, b: 2, c:{a: 1, b: {a: 1, b: {a: 1, b: {a: 1, b: {a: 1, b: {a: 1, b: {a: 1, b: {a: 1, b: 1}}}}}}}}}
 
@@ -26,6 +31,7 @@ export class RoomsListCompComponent implements OnChanges {
   }
 
   selectRoom(room: RoomDataInterface) {
-    this.selectedRoomEmitter.emit(room)
+    // this.selectedRoomEmitter.emit(room)
+    this.router.navigateByUrl(`rooms/details/${room?.roomNumber}`)
   }
 }

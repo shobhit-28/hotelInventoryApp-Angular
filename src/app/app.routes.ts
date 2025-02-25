@@ -1,10 +1,10 @@
 import { Routes } from '@angular/router';
-import { RoomsComponent } from './pages/rooms/rooms.component';
 import { HomepageComponent } from './pages/homepage/homepage.component';
 import { ErrorCompComponent } from './components/error-comp/error-comp.component';
+import { routesForRooms } from './pages/rooms/rooms.module';
 
 export const routes: Routes = [
     {path: '', component: HomepageComponent},
-    {path: 'rooms', component: RoomsComponent},
-    {path: '**', component: ErrorCompComponent}
+    {path: 'rooms', children: routesForRooms},
+    {path: '**', component: ErrorCompComponent},
 ];
