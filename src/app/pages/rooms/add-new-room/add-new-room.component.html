@@ -1,0 +1,27 @@
+<div class="p-6">
+    <form (ngSubmit)="addNewRoom()" #newRoomForm="ngForm">
+        <div class="flex flex-col gap-2">
+            <ng-container *ngFor="let field of formsInputFieldsArr">
+                <input required class="p-4 font-sans text-lg border rounded-sm" [type]="field?.type" [name]="field.fieldFormName"
+                    [placeholder]="field?.displayName" [(ngModel)]="newRoom[field.fieldFormName]">
+            </ng-container>
+        </div>
+        <div class="">
+            <button [disabled]="newRoomForm.invalid" class="my-4 px-4 py-2 bg-indigo-800 text-blue-100 rounded-md" type="submit">
+                Add New Room
+            </button>
+        </div>
+    </form>
+
+    {{newRoom | json}}
+    <br>
+    {{newRoomForm.pristine | json}}
+    <br>
+    {{newRoomForm.dirty | json}}
+    <br>
+    {{newRoomForm.valid | json}}
+    <br>
+    {{newRoomForm.invalid | json}}
+    <br>
+    {{newRoomForm.value | json}}
+</div>

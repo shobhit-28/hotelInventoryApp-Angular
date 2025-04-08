@@ -1,5 +1,10 @@
-<hinv-rooms-list-comp [Rooms]="Rooms" title="Rooms"
-    (selectedRoomEmitter)="selectedRooms($event)"></hinv-rooms-list-comp>
-<div class="" *ngIf="selectedRoom">{{selectedRoom | json}}</div>
+<div class="rooms-comp p-4">
+    <hinv-rooms-list-comp [Rooms]="Rooms" title="Rooms"
+        (selectedRoomEmitter)="selectedRooms($event)"></hinv-rooms-list-comp>
+    
+    <button class="my-4 px-4 py-2 bg-indigo-800 text-blue-100 text-lg rounded-md" (click)="addNewRoom()">Add New Room</button>
+</div>
+
+<!-- <div class="" *ngIf="selectedRoom">{{selectedRoom | json}}</div> -->
 <!-- <p class="">{{ totalBytes.download }}</p>
 <div class="">{{ randomObj | json }}</div> -->

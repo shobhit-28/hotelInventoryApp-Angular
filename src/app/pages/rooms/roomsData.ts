@@ -49,3 +49,7 @@ export const roomData: Array<RoomDataInterface> = [
         roomCheckoutTime: new Date("2024-11-25T09:00:00"),
     }
 ];
+
+export function addNewRoom(newRoom: RoomDataInterface) {
+    roomData.push(newRoom)
+}

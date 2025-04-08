@@ -4,6 +4,7 @@ import { roomData, RoomDataInterface } from './roomsData';
 import { RoomsListCompComponent } from "./rooms-list-comp/rooms-list-comp.component";
 import { RoomsService } from './service/rooms.service';
 import { HttpEventType } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'hinv-rooms',
@@ -18,7 +19,8 @@ export class RoomsComponent implements OnInit {
   randomObj: { [k: string]: number } = {}
 
   constructor(
-    private roomsService: RoomsService
+    private roomsService: RoomsService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -78,4 +80,7 @@ export class RoomsComponent implements OnInit {
   //   this.roomsService.getPhotos().subscribe(data => console.log(data))
   // }
 
+  addNewRoom() {
+    this.router.navigateByUrl('/rooms/add')
+  }
 }
