@@ -1,5 +1,5 @@
 <div class="p-6">
-    <form (ngSubmit)="addNewRoom()" #newRoomForm="ngForm">
+    <form (ngSubmit)="addNewRoom(newRoomForm)" #newRoomForm="ngForm">
         <div class="flex flex-col gap-2">
             <ng-container *ngFor="let field of formsInputFieldsArr">
                 <input required class="p-4 font-sans text-lg border rounded-sm" [type]="field?.type" [name]="field.fieldFormName"
