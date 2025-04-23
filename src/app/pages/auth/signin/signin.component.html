@@ -1,1 +1,17 @@
-<p>signin works!</p>
+<div class="p-6">
+    <form (ngSubmit)="logIn(loginForm)" #loginForm="ngForm">
+        <div class="flex flex-col gap-2">
+            <ng-container *ngFor="let field of formsInputFieldsArr">
+                <input required class="p-4 font-sans text-lg border rounded-sm" [type]="field?.type"
+                    [name]="field.fieldFormName" [placeholder]="field?.displayName"
+                    [(ngModel)]="signInData[field.fieldFormName]">
+            </ng-container>
+        </div>
+        <div class="">
+            <button [disabled]="loginForm.invalid" class="my-4 px-4 py-2 bg-indigo-800 text-blue-100 rounded-md"
+                type="submit">
+                Add New Room
+            </button>
+        </div>
+    </form>
+</div>
