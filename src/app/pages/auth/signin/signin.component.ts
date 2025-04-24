@@ -2,13 +2,14 @@ import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { CommonPagesModuleModule } from '../../common-pages-module.module';
 import { HoverDirective } from '../../../directives/hover-directive/hover.directive';
+import { EmailValidatorDirective } from '../../../directives/emailValidator/email-validator.directive';
 
 type logInType = { userName: string, password: string, [key: string]: string }
 
 @Component({
   selector: 'hinv-signin',
   standalone: true,
-  imports: [CommonPagesModuleModule, HoverDirective],
+  imports: [CommonPagesModuleModule, HoverDirective, EmailValidatorDirective],
   templateUrl: './signin.component.html',
   styleUrl: './signin.component.scss'
 })
@@ -23,12 +24,12 @@ export class SigninComponent {
   public formsInputFieldsArr: ReadonlyArray<{
     displayName: string,
     fieldFormName: string,
-    type: 'text' | 'password'
+    type: 'email' | 'password'
   }> = Object.freeze([
     {
       displayName: 'User Name',
       fieldFormName: 'userName',
-      type: 'text',
+      type: 'email',
     }, {
       displayName: 'Password',
       fieldFormName: 'password',
