@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { CommonPagesModuleModule } from '../../common-pages-module.module';
+import { HoverDirective } from '../../../directives/hover-directive/hover.directive';
 
 type logInType = { userName: string, password: string, [key: string]: string }
 
 @Component({
   selector: 'hinv-signin',
   standalone: true,
-  imports: [CommonPagesModuleModule],
+  imports: [CommonPagesModuleModule, HoverDirective],
   templateUrl: './signin.component.html',
   styleUrl: './signin.component.scss'
 })
