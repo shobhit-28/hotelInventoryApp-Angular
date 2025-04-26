@@ -3,6 +3,7 @@ import { NgForm } from '@angular/forms';
 import { CommonPagesModuleModule } from '../../common-pages-module.module';
 import { HoverDirective } from '../../../directives/hover-directive/hover.directive';
 import { EmailValidatorDirective } from '../../../directives/emailValidator/email-validator.directive';
+import { Router } from '@angular/router';
 
 type logInType = { userName: string, password: string, [key: string]: string }
 
@@ -14,6 +15,10 @@ type logInType = { userName: string, password: string, [key: string]: string }
   styleUrl: './signin.component.scss'
 })
 export class SigninComponent {
+  constructor(
+    private router: Router
+  ) {}
+
   private signInDefaultData: logInType = {
     userName: null!,
     password: null!,
@@ -39,8 +44,8 @@ export class SigninComponent {
 
   public logIn(formGroup: NgForm) {
     console.log(formGroup.form.value)
-    if (formGroup.form.value.userName === 'shobhit' && formGroup.form.value.password === 'admin') {
-      alert('Logged in successfully')
+    if (formGroup.form.value.userName === 's@gm.co' && formGroup.form.value.password === 'admin') {
+      this.router.navigate(['rooms'])
     } else {
       alert('Try again later')
     }

@@ -32,6 +32,6 @@ export class RoomsListCompComponent implements OnChanges {
 
   selectRoom(room: RoomDataInterface) {
     // this.selectedRoomEmitter.emit(room)
-    this.router.navigateByUrl(`/rooms/details/${room?.roomNumber}`)
+    this.router.navigateByUrl(`/rooms/list/details/${room?.roomNumber}`)
   }
 }

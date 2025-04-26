@@ -23,6 +23,10 @@ export class EmailValidatorDirective implements Validator {
         return {
           invalidEmail: true
         }
+      } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value)) {
+        return {
+          invalidEmail: true
+        }
       }
     }
     return null

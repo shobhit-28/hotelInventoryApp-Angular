@@ -3,6 +3,8 @@
         (selectedRoomEmitter)="selectedRooms($event)"></hinv-rooms-list-comp>
     
     <button class="my-4 px-4 py-2 bg-indigo-800 text-blue-100 text-lg rounded-md" (click)="addNewRoom()">Add New Room</button>
+
+    <router-outlet></router-outlet>
 </div>
 
 <!-- <div class="" *ngIf="selectedRoom">{{selectedRoom | json}}</div> -->

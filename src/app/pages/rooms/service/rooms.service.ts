@@ -10,10 +10,10 @@ export class RoomsService {
     private http: HttpClient
   ) { }
 
-getPhotos() {
-  const req = new HttpRequest('GET', 'https://jsonplaceholder.typicode.com/photos', {
-    reportProgress: true
-  })
-  return this.http.request(req)
-}
+  getPhotos() {
+    const req = new HttpRequest('GET', 'https://jsonplaceholder.typicode.com/photos', {
+      reportProgress: true
+    })
+    return this.http.request(req)
+  }
 }
