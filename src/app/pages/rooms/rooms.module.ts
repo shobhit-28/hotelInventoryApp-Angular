@@ -6,15 +6,18 @@ import { RouterModule, RouterOutlet, Routes } from '@angular/router';
 import { BookRoomsCompComponent } from './book-rooms-comp/book-rooms-comp.component';
 import { AddNewRoomComponent } from './add-new-room/add-new-room.component';
 import { RouteConfigToken } from '../../services/routeConfig/route-config.service';
+import { roomGuard } from '../../guards/roomGuard/room.guard';
 
 export const routesForRooms: Routes = [
   { path: '', redirectTo: 'list', pathMatch: 'full' },
   {
-    path: 'list', component: RoomsComponent, children: [
-      { path: 'details/:id', component: BookRoomsCompComponent }
+    path: 'list', component: RoomsComponent,
+    canActivateChild: [roomGuard],
+    children: [
+      { path: 'details/:id', component: BookRoomsCompComponent },
+      { path: 'add', component: AddNewRoomComponent }
     ]
   },
-  { path: 'add', component: AddNewRoomComponent },
 ]
 
 @NgModule({

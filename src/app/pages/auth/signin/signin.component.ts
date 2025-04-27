@@ -4,6 +4,7 @@ import { CommonPagesModuleModule } from '../../common-pages-module.module';
 import { HoverDirective } from '../../../directives/hover-directive/hover.directive';
 import { EmailValidatorDirective } from '../../../directives/emailValidator/email-validator.directive';
 import { Router } from '@angular/router';
+import { AuthService } from '../authConfig/services/auth.service';
 
 type logInType = { userName: string, password: string, [key: string]: string }
 
@@ -16,8 +17,9 @@ type logInType = { userName: string, password: string, [key: string]: string }
 })
 export class SigninComponent {
   constructor(
-    private router: Router
-  ) {}
+    private router: Router,
+    private authService: AuthService
+  ) { }
 
   private signInDefaultData: logInType = {
     userName: null!,
@@ -43,11 +45,6 @@ export class SigninComponent {
   ])
 
   public logIn(formGroup: NgForm) {
-    console.log(formGroup.form.value)
-    if (formGroup.form.value.userName === 's@gm.co' && formGroup.form.value.password === 'admin') {
-      this.router.navigate(['rooms'])
-    } else {
-      alert('Try again later')
-    }
+    this.authService.login(formGroup.form.value.userName, formGroup.form.value.password)
   }
 }

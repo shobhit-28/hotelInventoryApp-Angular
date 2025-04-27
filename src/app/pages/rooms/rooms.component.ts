@@ -81,6 +81,6 @@ export class RoomsComponent implements OnInit {
   // }
 
   addNewRoom() {
-    this.router.navigateByUrl('/rooms/add')
+    this.router.navigateByUrl('/rooms/list/add')
   }
 }

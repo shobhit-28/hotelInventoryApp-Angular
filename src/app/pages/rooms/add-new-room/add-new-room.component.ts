@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonPagesModuleModule } from '../../common-pages-module.module';
 import { addNewRoom, RoomDataInterface } from '../roomsData';
 import { NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
 
 export type newRoomInterface = Omit<RoomDataInterface, 'roomCheckinTime' | 'roomCheckoutTime'> & { roomCheckinTime: string, roomCheckoutTime: string }
 
@@ -56,6 +57,8 @@ export class AddNewRoomComponent {
     }
   ])
 
+  constructor(private router: Router) { }
+
   addNewRoom(formGroup: NgForm) {
     let isValid: boolean = true;
     for (const objKey of Object.keys(this.newRoom) as Array<keyof newRoomInterface>) {
@@ -66,6 +69,7 @@ export class AddNewRoomComponent {
     if (isValid) {
       this.createNewRoom()
       alert('New Room created')
+      this.router.navigateByUrl('/rooms/list')
       formGroup.resetForm(this.defaultRoomData)
     }
   }
