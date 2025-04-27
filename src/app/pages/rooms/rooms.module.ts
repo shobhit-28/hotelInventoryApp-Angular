@@ -5,6 +5,7 @@ import { RoomsListCompComponent } from './rooms-list-comp/rooms-list-comp.compon
 import { RouterModule, RouterOutlet, Routes } from '@angular/router';
 import { BookRoomsCompComponent } from './book-rooms-comp/book-rooms-comp.component';
 import { AddNewRoomComponent } from './add-new-room/add-new-room.component';
+import { RouteConfigToken } from '../../services/routeConfig/route-config.service';
 
 export const routesForRooms: Routes = [
   { path: '', redirectTo: 'list', pathMatch: 'full' },
@@ -23,6 +24,9 @@ export const routesForRooms: Routes = [
     RouterOutlet,
     RouterModule.forChild(routesForRooms)
   ],
-  exports: [RoomsComponent]
+  exports: [RoomsComponent],
+  providers: [
+    { provide: RouteConfigToken, useValue: { title: 'Room' } }
+  ]
 })
 export class RoomsModule { }

@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Out
 import { RoomDataInterface } from '../roomsData';
 import _ from 'lodash';
 import { Router } from '@angular/router';
+import { ConfigService } from '../../../services/config/config.service';
 
 @Component({
   selector: 'hinv-rooms-list-comp',
@@ -16,7 +17,8 @@ export class RoomsListCompComponent implements OnChanges {
   @Output() selectedRoomEmitter = new EventEmitter<RoomDataInterface>();
 
   constructor(
-    private router: Router
+    private router: Router,
+    private config: ConfigService
   ) {}
 
   private obj1 = {a: 1, b: 2, c:{a: 1, b: {a: 1, b: {a: 1, b: {a: 1, b: {a: 1, b: {a: 1, b: {a: 1, b: {a: 1, b: 2}}}}}}}}}
