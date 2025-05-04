@@ -1,1 +1,285 @@
-<p>booking works!</p>
+<div class="p-4">
+    <p class="text-lg font-medium">Book Room</p>
+    @if (formFields.length && bookingForm) {
+    <form [formGroup]="bookingForm" (ngSubmit)="bookRoom()">
+
+        <div class="example-form">
+            @for (item of formFields; track $index) {
+            @switch (item.type) {
+            @case ('string') {
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>{{item.displayName}}</mat-label>
+                <input [required]="item.isMandatory" type="text" matInput [formControlName]="item.controlName"
+                    [placeholder]="item.placeHolder">
+                @if (bookingForm.controls[item.controlName].hasError('invalidFormat') &&
+                !bookingForm.controls[item.controlName].hasError('required')) {
+                <mat-error>{{ bookingForm.value[item.controlName] }} is not a valid {{ item.displayName }}</mat-error>
+                }
+                @if (bookingForm.controls[item.controlName].hasError('required')) {
+                <mat-error>{{ item.displayName }} is <strong>required</strong></mat-error>
+                }
+            </mat-form-field>
+            }
+            @case ('mail') {
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>{{item.displayName}}</mat-label>
+                <input [required]="item.isMandatory" type="text" hinvEmailValidator matInput
+                    [formControlName]="item.controlName" [placeholder]="item.placeHolder">
+                @if (bookingForm.controls[item.controlName].hasError('invalidEmail') &&
+                !bookingForm.controls[item.controlName].hasError('invalidFormat') &&
+                !bookingForm.controls[item.controlName].hasError('required')) {
+                <mat-error>{{ bookingForm.value[item.controlName] }} is not a valid email</mat-error>
+                }
+                @if (bookingForm.controls[item.controlName].hasError('invalidFormat') &&
+                !bookingForm.controls[item.controlName].hasError('required')) {
+                <mat-error>{{ bookingForm.value[item.controlName] }} is not a valid {{ item.displayName }}</mat-error>
+                }
+                @if (bookingForm.controls[item.controlName].hasError('required')) {
+                <mat-error>{{ item.displayName }} is <strong>required</strong></mat-error>
+                }
+            </mat-form-field>
+            }
+            @case ('tel') {
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>{{item.displayName}}</mat-label>
+                <span matTextPrefix>+91 &nbsp;</span>
+                <input [required]="item.isMandatory" type="tel" matInput [formControlName]="item.controlName"
+                    [placeholder]="item.placeHolder">
+                @if (bookingForm.controls[item.controlName].hasError('invalidFormat') &&
+                !bookingForm.controls[item.controlName].hasError('required')) {
+                <mat-error>{{ bookingForm.value[item.controlName] }} is not a valid {{ item.displayName }}</mat-error>
+                }
+                @if (bookingForm.controls[item.controlName].hasError('required')) {
+                <mat-error>{{ item.displayName }} is <strong>required</strong></mat-error>
+                }
+            </mat-form-field>
+            }
+            @case ('number') {
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>{{item.displayName}}</mat-label>
+                <input [required]="item.isMandatory" type="number" matInput [formControlName]="item.controlName"
+                    [placeholder]="item.placeHolder">
+                @if (bookingForm.controls[item.controlName].hasError('invalidFormat') &&
+                !bookingForm.controls[item.controlName].hasError('required')) {
+                <mat-error>{{ bookingForm.value[item.controlName] }} is not a valid {{ item.displayName }}</mat-error>
+                }
+                @if (bookingForm.controls[item.controlName].hasError('required')) {
+                <mat-error>{{ item.displayName }} is <strong>required</strong></mat-error>
+                }
+            </mat-form-field>
+            }
+            @case ('Date') {
+            <mat-form-field class="example-full-width" (click)="picker.open()">
+                <mat-label>{{item.displayName}}</mat-label>
+                <input [required]="item.isMandatory" matInput [matDatepicker]="picker"
+                    [formControlName]="item.controlName" [placeholder]="item.placeHolder" readonly>
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+                @if (bookingForm.controls[item.controlName].hasError('invalidFormat') &&
+                !bookingForm.controls[item.controlName].hasError('required')) {
+                <mat-error>{{ bookingForm.value[item.controlName] }} is not a valid {{ item.displayName
+                    }}</mat-error>
+                }
+                @if (bookingForm.controls[item.controlName].hasError('required')) {
+                <mat-error>{{ item.displayName }} is <strong>required</strong></mat-error>
+                }
+            </mat-form-field>
+            }
+            @case ('subFormArray') {
+            <div class="example-full-width flex justify-center items-center">
+                <button mat-flat-button
+                    [color]="bookingForm.controls[item.controlName].hasError('required') && bookingForm.controls[item.controlName].touched ? 'warn' : 'primary'"
+                    class="w-full h-10" type="button" (click)="addGuests(item)">View/Add Guests</button>
+                @if (bookingForm.controls[item.controlName].hasError('required') &&
+                bookingForm.controls[item.controlName].touched) {
+                <mat-error>{{ item.displayName }} is <strong>required</strong></mat-error>
+                }
+            </div>
+            }
+            @case ('subForm') {
+            <mat-expansion-panel class="w-full">
+                <mat-expansion-panel-header>
+                    Guest Address
+                </mat-expansion-panel-header>
+
+                <ng-template matExpansionPanelContent>
+                    <div class="example-form" [formGroupName]="item.controlName">
+                        @for (subFormFieldItem of item?.subFormFields; track $index) {
+                        @switch (subFormFieldItem.type) {
+                        @case ('string') {
+                        <mat-form-field class="example-full-width" appearance="fill">
+                            <mat-label>{{subFormFieldItem.displayName}}</mat-label>
+                            <input [required]="subFormFieldItem.isMandatory" type="text" matInput
+                                [formControlName]="subFormFieldItem.controlName"
+                                [placeholder]="subFormFieldItem.placeHolder">
+                            @if
+                            (getControl(bookingForm, item.controlName,
+                            subFormFieldItem.controlName).hasError('invalidFormat')
+                            &&
+                            !getControl(bookingForm, item.controlName,
+                            subFormFieldItem.controlName).hasError('required')) {
+                            <mat-error>{{ bookingForm.value[item.controlName][subFormFieldItem.controlName] }} is not a
+                                valid {{
+                                subFormFieldItem.displayName
+                                }}</mat-error>
+                            }
+                            @if
+                            (getControl(bookingForm, item.controlName,
+                            subFormFieldItem.controlName).hasError('required')) {
+                            <mat-error>{{ subFormFieldItem.displayName }} is <strong>required</strong></mat-error>
+                            }
+                        </mat-form-field>
+                        }
+                        @case ('tel') {
+                        <mat-form-field class="example-full-width" appearance="fill">
+                            <mat-label>{{subFormFieldItem.displayName}}</mat-label>
+                            <span matTextPrefix>+91 &nbsp;</span>
+                            <input [required]="subFormFieldItem.isMandatory" type="tel" matInput
+                                [formControlName]="subFormFieldItem.controlName"
+                                [placeholder]="subFormFieldItem.placeHolder">
+                            @if
+                            (getControl(bookingForm, item.controlName,
+                            subFormFieldItem.controlName).hasError('invalidFormat')
+                            &&
+                            !getControl(bookingForm, item.controlName,
+                            subFormFieldItem.controlName).hasError('required')) {
+                            <mat-error>{{ bookingForm.value[item.controlName][subFormFieldItem.controlName] }} is not a
+                                valid {{
+                                subFormFieldItem.displayName
+                                }}</mat-error>
+                            }
+                            @if
+                            (getControl(bookingForm, item.controlName,
+                            subFormFieldItem.controlName).hasError('required')) {
+                            <mat-error>{{ subFormFieldItem.displayName }} is <strong>required</strong></mat-error>
+                            }
+                        </mat-form-field>
+                        }
+                        @case ('number') {
+                        <mat-form-field class="example-full-width" appearance="fill">
+                            <mat-label>{{subFormFieldItem.displayName}}</mat-label>
+                            <input [required]="subFormFieldItem.isMandatory" type="number" matInput
+                                [formControlName]="subFormFieldItem.controlName"
+                                [placeholder]="subFormFieldItem.placeHolder">
+                            @if
+                            (getControl(bookingForm, item.controlName,
+                            subFormFieldItem.controlName).hasError('invalidFormat')
+                            &&
+                            !getControl(bookingForm, item.controlName,
+                            subFormFieldItem.controlName).hasError('required')) {
+                            <mat-error>{{ bookingForm.value[item.controlName][subFormFieldItem.controlName] }} is not a
+                                valid {{
+                                subFormFieldItem.displayName
+                                }}</mat-error>
+                            }
+                            @if
+                            (getControl(bookingForm, item.controlName,
+                            subFormFieldItem.controlName).hasError('required')) {
+                            <mat-error>{{ subFormFieldItem.displayName }} is <strong>required</strong></mat-error>
+                            }
+                        </mat-form-field>
+                        }
+                        }
+                        }
+                    </div>
+
+                </ng-template>
+            </mat-expansion-panel>
+            }
+            }
+            }
+        </div>
+        <div class="">
+            <mat-checkbox color="primary" formControlName="tnc">I agree to the terms</mat-checkbox>
+            @if (bookingForm.controls['tnc'].hasError('required') && bookingForm.controls['tnc'].touched) {
+            <mat-error>You must agree to the terms and conditions to proceed.</mat-error>
+            }
+        </div>
+        <button mat-raised-button color="primary" class="my-4">Submit</button>
+    </form>
+    }
+</div>
+
+
+<ng-template class="modal" #guestsModal>
+    <div class="p-4">
+        <div class="flex justify-between items-center">
+            <p class="">
+                Guests
+            </p>
+            <p class="cursor-pointer" (click)="closeGuestsModal(guestModalRef)">
+                X
+            </p>
+        </div>
+        <div class="">
+            @for (item of bookingForm.value.guests; track $index) {
+            <div class="name-mail flex justify-between items-center">
+                <p [matTooltip]="item.guestName">{{item.guestName}}</p>
+                <p [matTooltip]="item.guestAge">{{item.guestAge}}</p>
+                <div class="">
+                    <button matTooltip="Edit Guest Details" mat-icon-button
+                        (click)="openAddEditGuestsModal({actionName: 'edit', index: $index})">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                    <button matTooltip="Edit Guest Details" mat-icon-button (click)="deleteGuestDetails($index)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </div>
+            </div>
+            }
+            <button mat-flat-button color="primary" type="button" (click)="openAddEditGuestsModal('add')">Add
+                guest</button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template class="modal" #addEditGuestModal>
+    <div class="p-3">
+        <div class="flex justify-between items-center">
+            <p class="">
+                Add/Edit Guests
+            </p>
+            <p class="cursor-pointer" (click)="closeGuestsModal(addEditGuestModalRef)">
+                X
+            </p>
+        </div>
+        <div class="">
+            <form [formGroup]="subFormGrpForArr.fg" (ngSubmit)="addEditGuest(subFormGrpForArr.action)"
+                class="flex flex-col">
+                @for (item of subFormGrpForArr.ff; track $index) {
+                @switch (item.type) {
+                @case ('string') {
+                <mat-form-field class="" appearance="fill">
+                    <mat-label>{{item.displayName}}</mat-label>
+                    <input [required]="item.isMandatory" type="text" matInput [formControlName]="item.controlName"
+                        [placeholder]="item.placeHolder">
+                    @if (subFormGrpForArr.fg.controls[item.controlName].hasError('invalidFormat') &&
+                    !subFormGrpForArr.fg.controls[item.controlName].hasError('required')) {
+                    <mat-error>{{ subFormGrpForArr.fg.value[item.controlName] }} is not a valid {{ item.displayName
+                        }}</mat-error>
+                    }
+                    @if (subFormGrpForArr.fg.controls[item.controlName].hasError('required')) {
+                    <mat-error>{{ item.displayName }} is <strong>required</strong></mat-error>
+                    }
+                </mat-form-field>
+                }
+                @case ('number') {
+                <mat-form-field class="" appearance="fill">
+                    <mat-label>{{item.displayName}}</mat-label>
+                    <input [required]="item.isMandatory" type="number" matInput [formControlName]="item.controlName"
+                        [placeholder]="item.placeHolder">
+                    @if (subFormGrpForArr.fg.controls[item.controlName].hasError('invalidFormat') &&
+                    !subFormGrpForArr.fg.controls[item.controlName].hasError('required')) {
+                    <mat-error>{{ subFormGrpForArr.fg.value[item.controlName] }} is not a valid {{ item.displayName
+                        }}</mat-error>
+                    }
+                    @if (subFormGrpForArr.fg.controls[item.controlName].hasError('required')) {
+                    <mat-error>{{ item.displayName }} is <strong>required</strong></mat-error>
+                    }
+                </mat-form-field>
+                }}}
+                <button mat-flat-button color="primary" type="submit">{{subFormGrpForArr.action.toUpperCase()}}</button>
+            </form>
+        </div>
+    </div>
+</ng-template>

@@ -1,0 +1,16 @@
+<form [formGroup]="parentForm" class="w-full">
+    <mat-form-field class="w-full" (click)="picker.open()">
+        <mat-label>Choose a date</mat-label>
+        <input matInput [matDatepicker]="picker" [formControlName]="fieldsData.controlName" readonly>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        @if (control?.hasError('invalidFormat') &&
+        !control?.hasError('required')) {
+        <mat-error>{{ parentForm.value[fieldsData.controlName] }} is not a valid {{ fieldsData.displayName
+            }}</mat-error>
+        }
+        @if (control?.hasError('required')) {
+        <mat-error>{{ fieldsData.displayName }} is <strong>required</strong></mat-error>
+        }
+    </mat-form-field>
+</form>
