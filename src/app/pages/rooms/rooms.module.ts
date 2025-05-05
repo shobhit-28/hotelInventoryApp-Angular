@@ -7,9 +7,19 @@ import { BookRoomsCompComponent } from './book-rooms-comp/book-rooms-comp.compon
 import { AddNewRoomComponent } from './add-new-room/add-new-room.component';
 import { RouteConfigToken } from '../../services/routeConfig/route-config.service';
 import { roomGuard } from '../../guards/roomGuard/room.guard';
+import { bookingRoutes } from '../booking/booking-routing.module';
+import { bookingFormFieldsResolver } from '../booking/resolvers/booking-form-fields.resolver';
+import { loginGuardMatch } from '../../guards/loginGuard/canMatch/login.guard';
+import { loginGuard } from '../../guards/loginGuard/canActivate/login.guard';
 
 export const routesForRooms: Routes = [
   { path: '', redirectTo: 'list', pathMatch: 'full' },
+  {
+    path: 'booking/:id',
+    loadChildren: () => import('../../pages/booking/booking.module').then(m => m.BookingModule),
+    resolve: { fields: bookingFormFieldsResolver },
+    canActivate: [loginGuard], canMatch: [loginGuardMatch],
+  },
   {
     path: 'list', component: RoomsComponent,
     canActivateChild: [roomGuard],

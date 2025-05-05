@@ -1,5 +1,5 @@
 <div class="p-4">
-    <p class="text-lg font-medium">Book Room</p>
+    <p class="text-lg font-medium">Book Room {{selectedRoom}}</p>
     @if (formFields.length && bookingForm) {
     <form [formGroup]="bookingForm" (ngSubmit)="bookRoom()">
 
@@ -89,7 +89,7 @@
             <div class="example-full-width flex justify-center items-center">
                 <button mat-flat-button
                     [color]="bookingForm.controls[item.controlName].hasError('required') && bookingForm.controls[item.controlName].touched ? 'warn' : 'primary'"
-                    class="w-full h-10" type="button" (click)="addGuests(item)">View/Add Guests</button>
+                    class="w-full py-4" type="button" (click)="addGuests(item)">View/Add Guests</button>
                 @if (bookingForm.controls[item.controlName].hasError('required') &&
                 bookingForm.controls[item.controlName].touched) {
                 <mat-error>{{ item.displayName }} is <strong>required</strong></mat-error>
@@ -133,7 +133,7 @@
                         @case ('tel') {
                         <mat-form-field class="example-full-width" appearance="fill">
                             <mat-label>{{subFormFieldItem.displayName}}</mat-label>
-                            <span matTextPrefix>+91 &nbsp;</span>
+                            <span matTextPrefix>{{findCountryCode()}} &nbsp;</span>
                             <input [required]="subFormFieldItem.isMandatory" type="tel" matInput
                                 [formControlName]="subFormFieldItem.controlName"
                                 [placeholder]="subFormFieldItem.placeHolder">
@@ -179,6 +179,23 @@
                             }
                         </mat-form-field>
                         }
+                        @case ('dropdown') {
+                        <mat-form-field class="example-full-width" appearance="fill">
+                            <mat-label>{{subFormFieldItem.displayName}}</mat-label>
+                            <mat-select [formControlName]="subFormFieldItem.controlName"
+                                [required]="subFormFieldItem.isMandatory">
+                                @for (country of countryList; track $index) {
+                                <mat-option [value]="country.name">{{country.name}}</mat-option>
+                                }
+                            </mat-select>
+                            @if
+                            (getControl(bookingForm, item.controlName,
+                            subFormFieldItem.controlName).hasError('required')) {
+                            <mat-error>{{ subFormFieldItem.displayName }} is <strong>required</strong></mat-error>
+                            }
+                            <mat-hint>{{subFormFieldItem.placeHolder}}</mat-hint>
+                        </mat-form-field>
+                        }
                         }
                         }
                     </div>
@@ -195,7 +212,11 @@
             <mat-error>You must agree to the terms and conditions to proceed.</mat-error>
             }
         </div>
-        <button mat-raised-button color="primary" class="my-4">Submit</button>
+        <div class="flex gap-2">
+            <button mat-flat-button color="primary" class="my-4">Submit</button>
+            <button mat-stroked-button color="primary" type="button" class="my-4"
+                (click)="resetForm(bookingForm, { roomId: selectedRoom })">Reset</button>
+        </div>
     </form>
     }
 </div>

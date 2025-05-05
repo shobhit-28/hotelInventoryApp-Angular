@@ -19,10 +19,10 @@ export class RoomsListCompComponent implements OnChanges {
   constructor(
     private router: Router,
     private config: ConfigService
-  ) {}
+  ) { }
 
-  private obj1 = {a: 1, b: 2, c:{a: 1, b: {a: 1, b: {a: 1, b: {a: 1, b: {a: 1, b: {a: 1, b: {a: 1, b: {a: 1, b: 2}}}}}}}}}
-  private obj2 = {a: 1, b: 2, c:{a: 1, b: {a: 1, b: {a: 1, b: {a: 1, b: {a: 1, b: {a: 1, b: {a: 1, b: {a: 1, b: 1}}}}}}}}}
+  private obj1 = { a: 1, b: 2, c: { a: 1, b: { a: 1, b: { a: 1, b: { a: 1, b: { a: 1, b: { a: 1, b: { a: 1, b: { a: 1, b: 2 } } } } } } } } }
+  private obj2 = { a: 1, b: 2, c: { a: 1, b: { a: 1, b: { a: 1, b: { a: 1, b: { a: 1, b: { a: 1, b: { a: 1, b: { a: 1, b: 1 } } } } } } } } }
 
   ngOnChanges(changes: SimpleChanges): void {
     console.log(changes)
@@ -32,8 +32,14 @@ export class RoomsListCompComponent implements OnChanges {
     }
   }
 
-  selectRoom(room: RoomDataInterface) {
+  selectRoom(room: RoomDataInterface, action: "select" | "book") {
     // this.selectedRoomEmitter.emit(room)
-    this.router.navigateByUrl(`/rooms/list/details/${room?.roomNumber}`)
+    if (action === 'select') {
+      this.router.navigateByUrl(`/rooms/list/details/${room?.roomNumber}`)
+    } else if (action === 'book') {
+      this.router.navigateByUrl(`/rooms/booking/${room?.roomNumber}`)      
+    } else {
+      console.log('NOTHING')
+    }
   }
 }

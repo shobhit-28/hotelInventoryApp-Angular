@@ -7,7 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { DatePickerComponent } from '../../components/date-picker/date-picker.component';
 import { EmailValidatorDirective } from '../../directives/emailValidator/email-validator.directive';
-import { BookingRoutingModule } from './booking-routing.module';
+import { bookingRoutes, BookingRoutingModule } from './booking-routing.module';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatButtonModule } from '@angular/material/button';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -15,6 +15,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSelectModule } from '@angular/material/select';
 
 // const routes: Routes = [
 //   { path: '', component: BookingComponent }
@@ -37,9 +38,10 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatDialogModule,
     MatIconModule,
     MatTooltipModule,
-    MatCheckboxModule
-    // BookingRoutingModule
-    // RouterModule.forChild(routes)
+    MatCheckboxModule,
+    MatSelectModule,
+    // BookingRoutingModule,
+    RouterModule.forChild(bookingRoutes)
   ],
 })
 export class BookingModule { }

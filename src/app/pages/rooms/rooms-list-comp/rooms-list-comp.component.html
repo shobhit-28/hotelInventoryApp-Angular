@@ -11,6 +11,7 @@
                 <th class="py-4">Room Checkin Time</th>
                 <th class="py-4">Room Checkout Time</th>
                 <th class="py-4">Select Room</th>
+                <th class="py-4">Book Room</th>
             </tr>
         </thead>
         <tbody>
@@ -23,9 +24,15 @@
                 <td>{{room?.roomCheckinTime | date}}</td>
                 <td>{{room?.roomCheckoutTime?.toDateString()}}</td>
                 <td>
-                    <button (click)="selectRoom(room)"
+                    <button (click)="selectRoom(room, 'select')"
                         class="border p-1 m-2 rounded-md hover:bg-slate-950 hover:text-white hover:border-slate-950">
                         Select
+                    </button>
+                </td>
+                <td>
+                    <button (click)="selectRoom(room, 'book')"
+                        class="border p-1 m-2 rounded-md hover:bg-slate-950 hover:text-white hover:border-slate-950">
+                        Book
                     </button>
                 </td>
             </tr>

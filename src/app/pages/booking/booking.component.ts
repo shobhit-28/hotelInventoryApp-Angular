@@ -1,7 +1,7 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ConfigService } from '../../services/config/config.service';
 import { FormGroup, FormBuilder, FormControl, FormArray } from '@angular/forms';
-import { BookingService, FormFieldsType } from './service/booking.service';
+import { BookingService, countryList, FormFieldsType } from './service/booking.service';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -22,6 +22,8 @@ export class BookingComponent implements OnInit {
   guestModalRef!: MatDialogRef<any>;
   addEditGuestModalRef!: MatDialogRef<any>;
   subFormGrpForArr: { fg: FormGroup, ff: FormFieldsType, action: 'add' | 'edit', editIndex?: number } = { fg: new FormGroup(''), ff: new Array(), action: 'add' }
+  countryList: countryList = new Array();
+  selectedRoom!: string;
 
   constructor(
     private configService: ConfigService,
@@ -32,43 +34,48 @@ export class BookingComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    console.log('BookingComponent initialized');
     this.route.data.subscribe(data => {
       this.formFields = data['fields'];
       this.createForm();
     });
+    this.selectedRoom = this.route.snapshot.params['id']
+    this.bookingForm.patchValue({ roomId: this.selectedRoom })
     console.log(this.bookingForm)
     console.log(this.bookingForm.get('address.guestAddress1'))
 
     // some RXJS Ex
 
-    this.bookingForm.valueChanges
-      .pipe(
-        mergeMap((data) => this.bookingService.getPosts(data))
-      )
-      .subscribe((res) => console.log(res))
-    this.bookingForm.valueChanges
-      .pipe(
-        switchMap((data) => this.bookingService.getPosts(data))
-      )
-      .subscribe((res) => console.log(res))
-    this.bookingForm.valueChanges
-      .pipe(
-        exhaustMap((data) => this.bookingService.getPosts(data))
-      )
-      .subscribe((res) => console.log(res))
-
-
-
     // this.bookingForm.valueChanges
-    //   .subscribe((data) => {
-    //     console.log(this.bookingForm)
-    //     console.log(this.bookingForm.controls)
-    //   })
+    //   .pipe(
+    //     mergeMap((data) => this.bookingService.getPosts(data))
+    //   )
+    //   .subscribe((res) => console.log(res))
+    // this.bookingForm.valueChanges
+    //   .pipe(
+    //     switchMap((data) => this.bookingService.getPosts(data))
+    //   )
+    //   .subscribe((res) => console.log(res))
+    // this.bookingForm.valueChanges
+    //   .pipe(
+    //     exhaustMap((data) => this.bookingService.getPosts(data))
+    //   )
+    //   .subscribe((res) => console.log(res))
+
+
+    console.log(this.bookingForm)
+    this.bookingForm.valueChanges
+      .subscribe((data) => {
+        console.log(this.bookingForm)
+        console.log(this.bookingForm.controls)
+        console.log(this.bookingForm.getRawValue())
+      })
   }
 
   createForm() {
     // this.formFields = this.route.snapshot.data['fields']
     if (this.formFields && this.formFields.length > 0) {
+      this.getCountriesList()
       this.bookingForm = this.bookingService.createForms(this.formFields, true);
     } else {
       console.error('Form fields are not available');
@@ -78,7 +85,7 @@ export class BookingComponent implements OnInit {
   bookRoom() {
     console.log(this.bookingForm)
     if (this.bookingForm.valid) {
-      console.log(this.bookingForm.value)
+      console.log(this.bookingForm.getRawValue())
     } else {
       this.bookingForm.markAllAsTouched()
     }
@@ -116,7 +123,7 @@ export class BookingComponent implements OnInit {
       this.subFormGrpForArr['editIndex'] = action.index
       const formArr = this.bookingForm.get('guests') as FormArray
       const fg = formArr.at(action.index) as FormGroup
-      this.subFormGrpForArr['fg'].patchValue(fg.value)
+      this.subFormGrpForArr['fg'].patchValue(fg.getRawValue())
     }
     this.addEditGuestModalRef = this.dialog.open(this.addEditGuestModal, {
       width: '300px',
@@ -147,7 +154,7 @@ export class BookingComponent implements OnInit {
         if (this.subFormGrpForArr['editIndex'] !== undefined) {
           const formArr = this.bookingForm.get('guests') as FormArray
           const fg = formArr.at(this.subFormGrpForArr['editIndex']) as FormGroup
-          fg.patchValue(this.subFormGrpForArr.fg.value)
+          fg.patchValue(this.subFormGrpForArr.fg.getRawValue())
         }
       }
       this.closeGuestsModal(this.addEditGuestModalRef)
@@ -157,6 +164,24 @@ export class BookingComponent implements OnInit {
   deleteGuestDetails(index: number) {
     const formArr = this.bookingForm.get('guests') as FormArray
     formArr.removeAt(index)
+  }
+
+  async getCountriesList() {
+    this.countryList = await this.bookingService.getCountriesList()
+    console.log(this.countryList)
+  }
+
+  findCountryCode(): string {
+    const countryCode = this.countryList.find((val) => val.name === this.bookingForm.getRawValue()?.address?.guestCountry)?.phonecode || '+91'
+    return countryCode.includes('+') ? countryCode : `+${countryCode}`
+  }
+
+  resetForm(formGroup: FormGroup, ...keyVal: Array<{ [k: string]: any }>) {
+    let defaultVal = {}
+    for (const keyValue of keyVal) {
+      defaultVal = { ...defaultVal, ...keyValue }
+    }
+    formGroup.reset(defaultVal)
   }
 
 }

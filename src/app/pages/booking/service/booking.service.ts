@@ -6,28 +6,41 @@ export type FormFieldsType = Array<{
   controlName: string;
   displayName: string;
   placeHolder: string;
-  type: 'string' | 'Date' | 'number' | 'mail' | 'tel' | 'subForm' | 'subFormArray';
+  type: 'string' | 'Date' | 'number' | 'mail' | 'tel' | 'subForm' | 'subFormArray' | 'dropdown';
   isRegex: boolean;
   regexExp?: RegExp;
   isMandatory: boolean;
   subFormFields?: FormFieldsType;
-  updateOn: 'change' | 'blur' | 'submit'
+  updateOn: 'change' | 'blur' | 'submit',
+  disable: boolean
+}>
+
+export type countryList = Array<{
+  id: number,
+  name: string,
+  iso2: string,
+  iso3: string,
+  phonecode: string,
+  capital: string,
+  currency: string,
+  native: string,
+  emoji: string
 }>
 
 class FormValidationClass {
   protected nullValidator = (control: AbstractControl): null | ValidationErrors => {
-    return control.value === null
+    return control.getRawValue() === null
       ? { required: true }
-      : control.value === ""
+      : control.getRawValue() === ""
         ? { required: true }
-        : control.value.length == 0
+        : control.getRawValue().length == 0
           ? { required: true }
           : null
   }
 
   protected regexValidator = (regex: RegExp): ValidatorFn => {
     return (control: AbstractControl): null | ValidationErrors => {
-      return regex.test(control.value) ? null : { invalidFormat: true }
+      return regex.test(control.getRawValue()) ? null : { invalidFormat: true }
     }
   }
 
@@ -54,6 +67,7 @@ export class BookingService extends FormValidationClass {
       type: 'string',
       isRegex: true,
       isMandatory: true,
+      disable: false,
       updateOn: 'blur',
       regexExp: /^(?!.*\d)(?!.*test).*$/i
     },
@@ -64,6 +78,7 @@ export class BookingService extends FormValidationClass {
       type: 'mail',
       isRegex: false,
       isMandatory: true,
+      disable: false,
       updateOn: 'change',
     },
     {
@@ -73,6 +88,7 @@ export class BookingService extends FormValidationClass {
       type: 'string',
       isRegex: false,
       isMandatory: true,
+      disable: true,
       updateOn: 'change',
     },
     {
@@ -82,6 +98,7 @@ export class BookingService extends FormValidationClass {
       type: 'Date',
       isRegex: false,
       isMandatory: true,
+      disable: false,
       updateOn: 'change',
     },
     {
@@ -91,6 +108,7 @@ export class BookingService extends FormValidationClass {
       type: 'Date',
       isRegex: false,
       isMandatory: true,
+      disable: false,
       updateOn: 'change',
     },
     {
@@ -100,6 +118,7 @@ export class BookingService extends FormValidationClass {
       type: 'string',
       isRegex: false,
       isMandatory: true,
+      disable: false,
       updateOn: 'change',
     },
     {
@@ -109,6 +128,7 @@ export class BookingService extends FormValidationClass {
       type: 'number',
       isRegex: false,
       isMandatory: true,
+      disable: false,
       updateOn: 'change',
     },
     {
@@ -118,6 +138,7 @@ export class BookingService extends FormValidationClass {
       type: 'Date',
       isRegex: false,
       isMandatory: true,
+      disable: false,
       updateOn: 'change',
     },
     {
@@ -127,6 +148,7 @@ export class BookingService extends FormValidationClass {
       type: 'subFormArray',
       isRegex: false,
       isMandatory: true,
+      disable: false,
       updateOn: 'change',
       subFormFields: [
         {
@@ -136,15 +158,17 @@ export class BookingService extends FormValidationClass {
           type: 'string',
           isRegex: false,
           isMandatory: true,
+          disable: false,
           updateOn: 'change',
         },
         {
           controlName: "guestAge",
           displayName: "Guest Age",
-          placeHolder: "Enter guest's email",
+          placeHolder: "Enter guest's age",
           type: 'number',
           isRegex: false,
           isMandatory: true,
+          disable: false,
           updateOn: 'change',
         }
       ]
@@ -155,6 +179,7 @@ export class BookingService extends FormValidationClass {
       placeHolder: "",
       type: 'subForm',
       isMandatory: false,
+      disable: false,
       updateOn: 'change',
       isRegex: false,
       subFormFields: [
@@ -162,9 +187,10 @@ export class BookingService extends FormValidationClass {
           controlName: "guestCountry",
           displayName: "Guest Country",
           placeHolder: 'Enter your Country Name',
-          type: 'string',
+          type: 'dropdown',
           isRegex: false,
           isMandatory: true,
+          disable: false,
           updateOn: 'change',
         },
         {
@@ -174,6 +200,27 @@ export class BookingService extends FormValidationClass {
           type: 'string',
           isRegex: false,
           isMandatory: true,
+          disable: false,
+          updateOn: 'change',
+        },
+        {
+          controlName: "guestAddress1",
+          displayName: "Guest Address 1",
+          placeHolder: 'Enter your address',
+          type: 'string',
+          isRegex: false,
+          isMandatory: true,
+          disable: false,
+          updateOn: 'change',
+        },
+        {
+          controlName: "guestAddress2",
+          displayName: "Guest Address 2",
+          placeHolder: 'Enter your address',
+          type: 'string',
+          isRegex: false,
+          isMandatory: true,
+          disable: false,
           updateOn: 'change',
         },
         {
@@ -184,6 +231,7 @@ export class BookingService extends FormValidationClass {
           isRegex: true,
           regexExp: /^\d{10}$/,
           isMandatory: true,
+          disable: false,
           updateOn: 'change',
         },
         {
@@ -193,6 +241,7 @@ export class BookingService extends FormValidationClass {
           type: 'number',
           isRegex: false,
           isMandatory: true,
+          disable: false,
           updateOn: 'change',
         },
       ]
@@ -239,6 +288,9 @@ export class BookingService extends FormValidationClass {
           updateOn: formField?.updateOn
         })
         this.addValidator(formField, newControl)
+        if (formField.disable) {
+          newControl.disable()
+        }
         formGroupObj[formField.controlName] = newControl
       }
     }
@@ -249,24 +301,20 @@ export class BookingService extends FormValidationClass {
     return this.buildForms(formGroupObj)
   }
 
-  getCountriesList() {
+  getCountriesList(): Promise<countryList> {
     const headers = new HttpHeaders({
       'X-CSCAPI-KEY': 'QlRFeHpSN25iTGJZTFVwWUNrRUJFeWUwRUFYZ0JBaW1TQ3h5cHBhOQ=='
     });
-    this.http.get<Array<{
-      id: number,
-      name: string,
-      iso2: string,
-      iso3: string,
-      phonecode: string,
-      capital: string,
-      currency: string,
-      native: string,
-      emoji: string
-    }>>('https://api.countrystatecity.in/v1/countries', { headers })
-      .subscribe((response) => {
-        console.trace(response)
-      })
+    return new Promise<countryList>((resolve, reject) => {
+      this.http.get<countryList>('https://api.countrystatecity.in/v1/countries', { headers })
+        .subscribe({
+          next: (response) => resolve(response),
+          error: (error) => {
+            console.error(error);
+            reject(error);
+          }
+        })
+    })
   }
 
   getPosts = (payload: { [key: string]: any }) => this.http.post('https://jsonplaceholder.typicode.com/posts', payload)

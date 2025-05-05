@@ -12,15 +12,8 @@ export const routes: Routes = [
     {
         path: 'rooms',
         loadChildren: () => import('./pages/rooms/rooms.module').then((m) => m.RoomsModule),
-        // canActivate: [loginGuard], canMatch: [loginGuardMatch]
+        canActivate: [loginGuard], canMatch: [loginGuardMatch]
     },
     { path: 'auth', children: routesForAuth },
-    {
-        path: 'booking',
-        children: bookingRoutes,
-        // loadChildren: () => import('./pages/booking/booking.module').then(m => m.BookingModule),
-        resolve: { fields: bookingFormFieldsResolver },
-        // canActivate: [loginGuard], canMatch: [loginGuardMatch]
-    },
     { path: '**', component: ErrorCompComponent },
 ];
