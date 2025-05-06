@@ -1,4 +1,4 @@
-import { APP_INITIALIZER, ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
+import { APP_INITIALIZER, ApplicationConfig, ErrorHandler, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -8,6 +8,7 @@ import { InitService } from '../initService/init.service';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { RouteConfigToken } from './services/routeConfig/route-config.service';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { ErrorHandlerService } from './services/errorHandler/error-handler.service';
 
 function initApp(initService: InitService) {
   return () => initService.initFunc()
@@ -20,6 +21,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(), importProvidersFrom(MatSnackBarModule),
     { provide: APP_INITIALIZER, useFactory: initApp, multi: true, deps: [InitService] },
     { provide: RouteConfigToken, useValue: { title: 'Home' } },
+    { provide: ErrorHandler, useClass: ErrorHandlerService },
     provideAnimationsAsync()
   ]
 };
