@@ -1,0 +1,23 @@
+<div class="p-4">
+    <div class="w-full">
+        <h1 class="font-semibold text-xl">Comments</h1>
+        <table class="w-full">
+            <thead>
+                <tr class="bg-sky-950 text-sky-100">
+                    @for (item of comments.columns; track $index) {
+                        <th class="py-4">{{item.toLocaleUpperCase()}}</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @for (row of comments.rows; let e = $even; let o = $odd; track $index) {
+                    <tr [ngClass]="e ? 'even' : 'odd'">
+                        @for (col of comments.columns; track $index) {
+                            <td>{{row[col]}}</td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -6,8 +6,13 @@
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list>
       <a mat-list-item routerLink="">Home</a>
-      <a mat-list-item routerLink="/rooms">Rooms</a>
-      <a mat-list-item routerLink="/auth">Auth</a>
+      @if (isLoggedIn()) {
+        <a  mat-list-item routerLink="/rooms">Rooms</a>
+        <a mat-list-item routerLink="/comments">Comments</a>
+
+      } @else {
+        <a mat-list-item routerLink="/auth">Signin</a>
+      }
       <!-- <a mat-list-item routerLink="/booking">Booking</a> -->
     </mat-nav-list>
   </mat-sidenav>
