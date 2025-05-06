@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CommentsComponent } from './comments.component';
+import { ActivatedRoute } from '@angular/router';
 
 describe('CommentsComponent', () => {
   let component: CommentsComponent;
@@ -8,7 +9,7 @@ describe('CommentsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CommentsComponent]
+      imports: [CommentsComponent],
     })
     .compileComponents();
 
